@@ -1,0 +1,15 @@
+{
+  "NeurIPS": { "source": "CORE", "tier": "A*" },
+  "CVPR": { "source": "CORE", "tier": "A*" },
+  "ACL": { "source": "CORE", "tier": "A*" },
+  "EMNLP": { "source": "CORE", "tier": "A" },
+  "ICSE": { "source": "CORE", "tier": "A*" },
+  "USENIX Security": { "source": "CORE", "tier": "A*" },
+  "SIGMOD": { "source": "CORE", "tier": "A*" },
+  "CCS": { "source": "CORE", "tier": "A*" },
+  "ISMB": { "source": "Scimago", "tier": "A" },
+  "SfN": { "source": "Scimago", "tier": "B" },
+  "AOM": { "source": "ABDC", "tier": "A*" },
+  "AFA": { "source": "ABDC", "tier": "A*" },
+  "KDD": { "source": "CORE", "tier": "A*" }
+}
