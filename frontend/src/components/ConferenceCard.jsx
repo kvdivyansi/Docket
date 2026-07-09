@@ -1,10 +1,13 @@
 import { useState } from "react";
 import Stamp from "./Stamp.jsx";
 import CountdownTicket from "./CountdownTicket.jsx";
+import { requestGoogleCalendarAccess, addConferenceToGoogleCalendar } from "../utils/googleCalendarAuth.js";
 
-export default function ConferenceCard({ conf, onInterested, isTracked, matchTerms }) {
+export default function ConferenceCard({ conf, onInterested, isTracked, matchTerms, googleToken, onGoogleToken }) {
   const [loading, setLoading] = useState(false);
   const [justTracked, setJustTracked] = useState(false);
+  const [calendarStatus, setCalendarStatus] = useState(null); // 'adding' | 'added' | 'error'
+  const [calendarError, setCalendarError] = useState(null);
 
   const handleClick = async () => {
     if (isTracked || justTracked) return;
@@ -12,6 +15,29 @@ export default function ConferenceCard({ conf, onInterested, isTracked, matchTer
     try {
       await onInterested(conf.id);
       setJustTracked(true);
+
+      setCalendarStatus("adding");
+      try {
+        // Reuse the token from a previous card's click if we have one;
+        // otherwise this is the first "I'm interested" ever, so pop the
+        // Google sign-in/consent screen right now.
+        let token = googleToken;
+        if (!token) {
+          token = await requestGoogleCalendarAccess();
+          onGoogleToken?.(token);
+        }
+
+        const { succeeded, failed } = await addConferenceToGoogleCalendar(token, conf);
+        if (failed.length > 0) {
+          setCalendarStatus("error");
+          setCalendarError(failed.map((f) => f.error).join("; "));
+        } else if (succeeded.length > 0) {
+          setCalendarStatus("added");
+        }
+      } catch (err) {
+        setCalendarStatus("error");
+        setCalendarError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -57,6 +83,14 @@ export default function ConferenceCard({ conf, onInterested, isTracked, matchTer
           </button>
           {tracked && <span className="confirm-note">Confirmation email sent</span>}
         </div>
+
+        {tracked && (
+          <div className="gcal-status">
+            {calendarStatus === "adding" && <span>Adding to Google Calendar…</span>}
+            {calendarStatus === "added" && <span className="gcal-ok">✓ Added to Google Calendar</span>}
+            {calendarStatus === "error" && <span className="gcal-err">Couldn't add to Google Calendar: {calendarError}</span>}
+          </div>
+        )}
       </div>
 
       <CountdownTicket daysUntilDeadline={conf.days_until_deadline} deadline={conf.abstract_deadline} />

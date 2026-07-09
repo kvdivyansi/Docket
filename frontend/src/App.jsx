@@ -7,6 +7,7 @@ import Suggest from "./pages/Suggest.jsx";
 
 function AppShell({ user, onLogout }) {
   const location = useLocation();
+  const [googleToken, setGoogleToken] = useState(null);
 
   return (
     <div className="shell">
@@ -26,6 +27,12 @@ function AppShell({ user, onLogout }) {
           </button>
         </div>
       </header>
+
+      {googleToken && (
+        <div className="gcal-bar">
+          <span className="gcal-connected">✓ Google Calendar connected for this session</span>
+        </div>
+      )}
 
       <nav className="tab-row">
         <Link
@@ -50,7 +57,16 @@ function AppShell({ user, onLogout }) {
 
       <Routes>
         <Route path="/" element={<LandingDashboard user={user} />} />
-        <Route path="/conferences" element={<ConferencePage user={user} />} />
+        <Route
+          path="/conferences"
+          element={
+            <ConferencePage
+              user={user}
+              googleToken={googleToken}
+              onGoogleToken={setGoogleToken}
+            />
+          }
+        />
         <Route path="/suggest" element={<Suggest user={user} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

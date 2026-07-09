@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api.js";
 import ConferenceCard from "../components/ConferenceCard.jsx";
 
-export default function ConferencePage({ user }) {
+export default function ConferencePage({ user, googleToken, onGoogleToken }) {
   const [domains, setDomains] = useState({});
   const [domain, setDomain] = useState("All");
   const [subdomain, setSubdomain] = useState("All");
@@ -157,6 +157,8 @@ export default function ConferencePage({ user }) {
                 conf={conf}
                 onInterested={handleInterested}
                 isTracked={tracked.includes(conf.id)}
+                googleToken={googleToken}
+                onGoogleToken={onGoogleToken}
               />
             ))}
           </div>

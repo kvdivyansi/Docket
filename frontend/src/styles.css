@@ -393,6 +393,33 @@ a {
   color: var(--sage);
 }
 
+.gcal-status {
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.gcal-ok {
+  color: var(--sage);
+}
+
+.gcal-err {
+  color: #b4453f;
+}
+
+.gcal-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 24px;
+}
+
+.gcal-connected {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--sage);
+}
+
 /* the ink stamp — rotated ranking badge */
 .stamp {
   position: absolute;
