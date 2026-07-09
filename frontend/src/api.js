@@ -28,7 +28,7 @@ export const api = {
     if (domain) params.set("domain", domain);
     if (subdomain) params.set("subdomain", subdomain);
     params.set("sort_by", sortBy || "ranking");
-    return request(`/conferences?${params.toString()}`);
+    return request(`/agent/conferences?${params.toString()}`);
   },
 
   getRejected: () => request("/conferences/rejected"),

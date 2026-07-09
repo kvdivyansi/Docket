@@ -21,7 +21,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from agents import scraper_agent, ranking_agent, bogus_detector_agent, recommender_agent, notification_agent
+from agents import scraper_agent, ranking_agent, bogus_detector_agent, recommender_agent, notification_agent, ai_search_agent
 
 BASE_DIR = os.path.dirname(__file__)
 DB_FILE = os.path.join(BASE_DIR, "data", "db.json")
@@ -41,18 +41,20 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 CLEAN_CONFERENCES: list[dict] = []
 REJECTED_CONFERENCES: list[dict] = []
+DISCARDED_BY_DATE_RULE: list[dict] = []
 
 
 def run_pipeline():
-    global CLEAN_CONFERENCES, REJECTED_CONFERENCES
-    raw = scraper_agent.scrape_conferences()
+    global CLEAN_CONFERENCES, REJECTED_CONFERENCES, DISCARDED_BY_DATE_RULE
+    raw, discarded_by_date = ai_search_agent.search_and_filter_conferences()
     ranked = ranking_agent.attach_rankings(raw)
     clean, rejected = bogus_detector_agent.filter_bogus(ranked)
     for i, conf in enumerate(clean):
         conf["id"] = conf["acronym"].replace(" ", "_")
     CLEAN_CONFERENCES = clean
     REJECTED_CONFERENCES = rejected
-    print(f"Pipeline run: {len(clean)} clean conferences, {len(rejected)} rejected as bogus.")
+    DISCARDED_BY_DATE_RULE = discarded_by_date
+    print(f"Pipeline run: {len(clean)} clean conferences, {len(rejected)} rejected as bogus, {len(discarded_by_date)} discarded by date/domain rules.")
 
 
 run_pipeline()
@@ -140,6 +142,30 @@ def get_conferences(domain: str | None = None, subdomain: str | None = None, sor
     return enriched
 
 
+@app.get("/api/agent/conferences")
+def get_agent_conferences(domain: str | None = None, subdomain: str | None = None, sort_by: str = "ranking"):
+    """New AI Agent Endpoint: Returns live web searched and strictly date-filtered conferences."""
+    results = recommender_agent.filter_and_sort(CLEAN_CONFERENCES, domain, subdomain, sort_by)
+    enriched = []
+    for c in results:
+        c = dict(c)
+        c["days_until_deadline"] = notification_agent.days_until(c["abstract_deadline"])
+        enriched.append(c)
+    return enriched
+
+
+@app.get("/api/agent/raw")
+def get_agent_raw_conferences():
+    """Returns the pure 11-key JSON array strictly conforming to the agent schema without UI enrichment."""
+    return ai_search_agent.get_valid_conferences()
+
+
+@app.get("/api/agent/discarded")
+def get_agent_discarded():
+    """Returns conferences discarded by the AI Agent due to the strict >30 day deadline-to-start rule or domain checks."""
+    return DISCARDED_BY_DATE_RULE
+
+
 @app.get("/api/conferences/rejected")
 def get_rejected():
     """Transparency endpoint: shows what the bogus-detector filtered out, and why."""
@@ -197,4 +223,9 @@ def suggest(req: SuggestRequest):
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "clean_conferences": len(CLEAN_CONFERENCES), "rejected": len(REJECTED_CONFERENCES)}
+    return {
+        "status": "ok",
+        "clean_conferences": len(CLEAN_CONFERENCES),
+        "rejected_bogus": len(REJECTED_CONFERENCES),
+        "discarded_by_date_rule": len(DISCARDED_BY_DATE_RULE)
+    }
