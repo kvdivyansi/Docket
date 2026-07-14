@@ -1,0 +1,47 @@
+{
+  "users": {
+    "6c34cc82-e22c-4994-bff2-57e4a5a58d0b": {
+      "full_name": "divya",
+      "email": "divyansikv@gmail.com",
+      "domain": null,
+      "subdomain": null,
+      "tracked": [
+        "CRYPTO",
+        "ICDM",
+        "AAAI"
+      ]
+    }
+  },
+  "notifications": [
+    {
+      "user_id": "6c34cc82-e22c-4994-bff2-57e4a5a58d0b",
+      "conference_id": "CRYPTO",
+      "to": "divyansikv@gmail.com",
+      "recipient_name": "divya",
+      "subject": "You're tracking CRYPTO - deadline countdown started",
+      "body": "Hi divya,\n\nYou've marked interest in International Cryptology Conference (CRYPTO).\nAbstract/paper deadline: 2026-02-15 (-149 days from today)\nNotification date: 2026-05-10\nConference dates: 2026-08-16 to 2026-08-20\nLocation: Santa Barbara, USA\nWebsite: https://crypto.iacr.org/2026\n\nWe'll remind you as the deadline approaches.",
+      "sent_at": "2026-07-14T07:44:30.408387",
+      "status": "mock_sent"
+    },
+    {
+      "user_id": "6c34cc82-e22c-4994-bff2-57e4a5a58d0b",
+      "conference_id": "ICDM",
+      "to": "divyansikv@gmail.com",
+      "recipient_name": "divya",
+      "subject": "You're tracking ICDM - deadline countdown started",
+      "body": "Hi divya,\n\nYou've marked interest in IEEE International Conference on Data Mining (ICDM).\nAbstract/paper deadline: 2026-08-01 (18 days from today)\nNotification date: 2026-10-15\nConference dates: 2026-12-01 to 2026-12-04\nLocation: Auckland, New Zealand\nWebsite: https://icdm2026.org\n\nWe'll remind you as the deadline approaches.",
+      "sent_at": "2026-07-14T07:45:03.068537",
+      "status": "mock_sent"
+    },
+    {
+      "user_id": "6c34cc82-e22c-4994-bff2-57e4a5a58d0b",
+      "conference_id": "AAAI",
+      "to": "divyansikv@gmail.com",
+      "recipient_name": "divya",
+      "subject": "You're tracking AAAI - deadline countdown started",
+      "body": "Hi divya,\n\nYou've marked interest in AAAI Conference on Artificial Intelligence (AAAI).\nAbstract/paper deadline: 2026-08-15 (32 days from today)\nNotification date: 2026-11-10\nConference dates: 2027-02-22 to 2027-03-01\nLocation: Philadelphia, USA\nWebsite: https://aaai.org/confs/aaai\n\nWe'll remind you as the deadline approaches.",
+      "sent_at": "2026-07-14T07:45:28.404011",
+      "status": "mock_sent"
+    }
+  ]
+}

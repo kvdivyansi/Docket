@@ -53,12 +53,12 @@ function AppShell({ user, onLogout }) {
           className={`tab-btn ${location.pathname === "/suggest" ? "active" : ""}`}
         >
           Suggest for my paper
-          <Link
-  to="/tracked"
-  className={`tab-btn ${location.pathname === "/tracked" ? "active" : ""}`}
->
-  Tracked
-</Link>
+        </Link>
+        <Link
+          to="/tracked"
+          className={`tab-btn ${location.pathname === "/tracked" ? "active" : ""}`}
+        >
+          Tracked
         </Link>
       </nav>
 
