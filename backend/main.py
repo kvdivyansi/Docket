@@ -121,7 +121,6 @@ def set_preferences(user_id: str, domain: str, subdomain: str | None = None):
     _save_db(db)
     return db["users"][user_id]
 
-
 @app.get("/api/domains")
 def get_domains():
     tree: dict[str, set[str]] = {}
@@ -196,6 +195,18 @@ def mark_interested(req: InterestRequest):
     _save_db(db)
     return {"status": "tracked", "email_preview": {"subject": subject, "body": body}}
 
+@app.delete("/api/interested")
+def unmark_interested(user_id: str, conference_id: str):
+    db = _load_db()
+    user = db["users"].get(user_id)
+    if not user:
+        raise HTTPException(404, "User not found")
+
+    if conference_id in user["tracked"]:
+        user["tracked"].remove(conference_id)
+
+    _save_db(db)
+    return {"status": "untracked"}
 
 @app.get("/api/users/{user_id}/tracked")
 def get_tracked(user_id: str):

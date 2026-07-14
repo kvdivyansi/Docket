@@ -39,7 +39,11 @@ export const api = {
       body: JSON.stringify({ user_id: userId, conference_id: conferenceId }),
     }),
 
-  getTracked: (userId) => request(`/users/${userId}/tracked`),
+  getTracked: (userId) => request(`/users/${userId}/tracked`),untrack: (userId, conferenceId) =>
+    request(`/interested?user_id=${encodeURIComponent(userId)}&conference_id=${encodeURIComponent(conferenceId)}`, {
+      method: "DELETE",
+    }),
+    
 
   suggest: (text, userId) =>
     request("/suggest", { method: "POST", body: JSON.stringify({ text, user_id: userId }) }),

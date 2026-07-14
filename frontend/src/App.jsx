@@ -4,6 +4,7 @@ import Onboarding from "./pages/Onboarding.jsx";
 import LandingDashboard from "./pages/LandingDashboard.jsx";
 import ConferencePage from "./pages/ConferencePage.jsx";
 import Suggest from "./pages/Suggest.jsx";
+import TrackedConferences from "./pages/TrackedConferences.jsx";
 
 function AppShell({ user, onLogout }) {
   const location = useLocation();
@@ -52,6 +53,12 @@ function AppShell({ user, onLogout }) {
           className={`tab-btn ${location.pathname === "/suggest" ? "active" : ""}`}
         >
           Suggest for my paper
+          <Link
+  to="/tracked"
+  className={`tab-btn ${location.pathname === "/tracked" ? "active" : ""}`}
+>
+  Tracked
+</Link>
         </Link>
       </nav>
 
@@ -68,6 +75,7 @@ function AppShell({ user, onLogout }) {
           }
         />
         <Route path="/suggest" element={<Suggest user={user} />} />
+        <Route path="/tracked" element={<TrackedConferences user={user} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
